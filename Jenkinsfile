@@ -2,15 +2,22 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Pull Code') {
             steps {
-                echo 'Webhook Test'
+                git branch: 'main',
+                    url: 'https://github.com/Divyaaffroi-07/jenkins-demo.git'
             }
         }
 
-        stage('Test') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Testing project'
+                sh 'sudo docker build -t docker-app:latest .'
+            }
+        }
+
+        stage('Display Image Details') {
+            steps {
+                sh 'sudo docker images docker-app:latest'
             }
         }
     }

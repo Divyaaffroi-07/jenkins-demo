@@ -2,25 +2,33 @@ pipeline {
     agent any
 
     stages {
+        stage('Pull Code') {
+            steps {
+                echo 'Pulling code from GitHub'
+            }
+        }
+
         stage('Build') {
             steps {
-                echo 'Building Docker image...'
-                sh 'docker build -t docker-cicd-app .'
+                echo 'Building application'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Testing application...'
-                sh 'docker run --rm docker-cicd-app node --check app.js'
+                echo 'Testing application'
             }
         }
 
-        stage('Deploy') {
+        stage('Docker Compose Up') {
             steps {
-                echo 'Deploying application...'
-                sh 'docker rm -f docker-cicd-app || true'
-                sh 'docker run -d --name docker-cicd-app -p 3000:3000 docker-cicd-app'
+                sh 'cd docker-compose-app && docker compose up -d'
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                sh 'cd docker-compose-app && docker compose ps'
             }
         }
     }

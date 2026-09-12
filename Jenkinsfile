@@ -11,13 +11,13 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'sudo docker build -t docker-app:latest .'
+                sh 'docker build -t docker-app:latest .'
             }
         }
 
         stage('Display Image Details') {
             steps {
-                sh 'sudo docker images docker-app:latest'
+                sh 'docker images docker-app:latest'
             }
         }
     }

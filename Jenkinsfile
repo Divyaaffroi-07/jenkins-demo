@@ -2,10 +2,23 @@ pipeline {
     agent any
 
     stages {
+
         stage('Pull Code') {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/Divyaaffroi-07/jenkins-demo.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building application'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Testing application'
             }
         }
 
@@ -15,9 +28,16 @@ pipeline {
             }
         }
 
-        stage('Display Image Details') {
+        stage('Deploy') {
             steps {
-                sh 'docker images docker-app:latest'
+                sh 'docker rm -f docker-app || true'
+                sh 'docker run -d --name docker-app -p 3000:3000 docker-app:latest'
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                sh 'docker ps'
             }
         }
     }
